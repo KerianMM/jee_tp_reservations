@@ -1,7 +1,9 @@
 package montp.data;
 
+import montp.data.model.ResourceTypeEntity;
 import montp.data.model.security.Group;
 import montp.data.model.security.User;
+import montp.services.ResourceTypeService;
 import montp.services.UserService;
 
 import javax.annotation.PostConstruct;
@@ -17,11 +19,10 @@ import java.util.List;
 @Startup
 public class Seeder {
     
-    @Inject
-    private UserService userService;
+    @Inject private UserService userService;
+    @Inject private ResourceTypeService resourceTypeService;
 
-    @PersistenceContext
-    private EntityManager em;
+    @PersistenceContext private EntityManager em;
     
     @PostConstruct
     public void init() {
@@ -36,6 +37,12 @@ public class Seeder {
             groupes.add(groupAdmin);
             userAdmin.setGroups(groupes);
             userService.insert(userAdmin);
+        }
+
+        if (resourceTypeService.getAll().isEmpty()) {
+            ResourceTypeEntity test = new ResourceTypeEntity("test", true);
+
+            em.persist(test);
         }
     }
 
