@@ -6,7 +6,19 @@
                 template="./layout.xhtml">
     <ui:define name="content">
         <h1>List</h1>
-        #{controller.resource.type.list()}
+        <p:dataTable var="type" value="#{controller.resource.type.list()}">
+            <p:column headerText="Id">
+                <h:outputText value="#{type.id}" />
+            </p:column>
+
+            <p:column headerText="Titre">
+                <h:outputText value="#{type.title}" />
+            </p:column>
+
+            <p:column headerText="Partageable">
+                <h:outputText value="#{(type.shareable) ?'oui' :'non'}" />
+            </p:column>
+        </p:dataTable>
     </ui:define>
 </ui:composition>
 
