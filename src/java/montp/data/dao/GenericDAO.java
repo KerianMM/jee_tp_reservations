@@ -1,28 +1,60 @@
 package montp.data.dao;
 
-import montp.data.model.GenericEntity;
+import montp.data.model.GenericModel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.List;
 
-public abstract class GenericDAO<T extends GenericEntity> {
+public abstract class GenericDAO<T extends GenericModel> {
 
     @PersistenceContext
     protected EntityManager em;
-    private Class<T> instanceClass;
+    protected Class<T> instanceClass;
 
-    public GenericDAO() {
-    }
-
+    public GenericDAO() {}
     public GenericDAO(Class<T> instanceClass) {
         this.instanceClass = instanceClass;
     }
 
-    public T get(long id) {
+    //region FINDERS
+    public T find(long id) {
         return em.find(instanceClass, id);
     }
 
+    public List<T> findAll() {
+        return this.em.createQuery(makeQLString()).getResultList();
+    }
+
+    public List<T> findPaged(Integer page, Integer perPage) {
+        return this.em.createQuery(makeQLString())
+            .setMaxResults(perPage)
+            .setFirstResult((page > 1) ?perPage * (page-1) :0)
+            .getResultList();
+    }
+    //endregion
+
+    //region QLMAKERS
+    protected String makeQLString() {
+        return makeQLString("e");
+    }
+    protected String makeQLString(String alias) {
+        return String.format(
+            "SELECT %2$s FROM %s %2$s",
+            instanceClass.getSimpleName(),
+            alias
+        );
+    }
+    protected String makeQLString(String alias, String query) {
+        return String.format("%s %s",
+            makeQLString(alias),
+            query
+        );
+    }
+    //endregion
+
+    //region TRANSACTIONS
     @Transactional
     public void insert(T instance) {
         em.persist(instance);
@@ -38,6 +70,7 @@ public abstract class GenericDAO<T extends GenericEntity> {
     public void delete(T instance) {
         em.remove(em.find(instanceClass, instance.getId()));
     }
+    //endregion
 
     public boolean canDelete(T instance) {
         return false;

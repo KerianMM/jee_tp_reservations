@@ -1,25 +1,17 @@
-package montp.data.model.security;
+package montp.data.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name="SECURITY_GROUP")
-public class Group implements Serializable {
+@MappedSuperclass
+public class GroupModel implements Serializable {
 
-    @Id
-    @Column(columnDefinition = "TEXT")
-    private String groupName;
+    protected String groupName;
 
-    public Group(String groupName) {
+    public GroupModel() {}
+    public GroupModel(String groupName) {
         this.groupName = groupName;
-    }
-
-    public Group() {
     }
 
     public String getGroupName() {
@@ -48,11 +40,10 @@ public class Group implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Group other = (Group) obj;
+        final GroupModel other = (GroupModel) obj;
         if (!Objects.equals(this.groupName, other.groupName)) {
             return false;
         }
         return true;
     }
-
 }

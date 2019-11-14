@@ -1,6 +1,6 @@
 package montp.web;
 
-import montp.data.model.security.User;
+import montp.data.entity.security.UserEntity;
 import montp.services.UserService;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +19,7 @@ public class UserSession implements Serializable {
 
     @Produces
     @Named
-    private User user;
+    private UserEntity user;
     
 
     @PostConstruct

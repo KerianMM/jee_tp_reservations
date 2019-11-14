@@ -1,8 +1,9 @@
 package montp.data;
 
-import montp.data.model.ResourceTypeEntity;
-import montp.data.model.security.Group;
-import montp.data.model.security.User;
+import montp.data.entity.ResourceTypeEntity;
+import montp.data.entity.security.GroupEntity;
+import montp.data.entity.security.UserEntity;
+import montp.data.model.GroupModel;
 import montp.services.ResourceTypeService;
 import montp.services.UserService;
 
@@ -27,12 +28,12 @@ public class Seeder {
     @PostConstruct
     public void init() {
         if (userService.getGroup("USER") == null) {
-            Group groupUser = new Group("USER");
+            GroupEntity groupUser = new GroupEntity("USER");
             em.persist(groupUser);
-            Group groupAdmin = new Group("ADMIN");
+            GroupEntity groupAdmin = new GroupEntity("ADMIN");
             em.persist(groupAdmin);
-            User userAdmin = new User("admin", "admin");
-            List<Group> groupes = new ArrayList<>();
+            UserEntity userAdmin = new UserEntity("admin", "admin");
+            List<GroupModel> groupes = new ArrayList<>();
             groupes.add(groupUser);
             groupes.add(groupAdmin);
             userAdmin.setGroups(groupes);

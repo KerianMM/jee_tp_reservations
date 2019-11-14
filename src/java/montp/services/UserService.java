@@ -1,8 +1,9 @@
 package montp.services;
 
 import montp.data.dao.UserDAO;
-import montp.data.model.security.Group;
-import montp.data.model.security.User;
+import montp.data.entity.security.GroupEntity;
+import montp.data.entity.security.UserEntity;
+import montp.data.model.GroupModel;
 import montp.tools.Tools;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,28 +12,29 @@ import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
-public class UserService extends GenericService<User, UserDAO> {
-
-    public List<User> getUsers() {
-        return dao.getUsers();
+public class UserService extends GenericService<UserEntity, UserDAO> {
+    //region GETTERS
+    public UserEntity getOneByUsername(String username) {
+        return dao.findOneByUsername(username.toLowerCase().trim());
     }
 
-    public User getFromUsername(String username) {
-        return dao.getFromUsername(username.toLowerCase().trim());
+    public GroupEntity getGroup(String groupname) { return dao.getGroup(groupname.toUpperCase().trim()); }
+    //endregion
+
+    //region VERIFICATIONS
+    public boolean isActive(UserEntity user) {
+        UserEntity u = get(user);
+        return (u != null) && u.getPassword() != null;
     }
 
-    public Group getGroup(String groupname) {
-        return dao.getGroup(groupname.toUpperCase().trim());
+    public boolean checkIfExists(String username) {
+        return getOneByUsername(username) != null;
     }
+    //endregion
 
-    public boolean isActive(User user) {
-        User u = dao.get(user.getId());
-        if (u == null) return false;
-        return u.getPassword() != null;
-    }
-
+    //region TRANSACTIONS
     @Transactional
-    public void disable(User user) {
+    public void disable(UserEntity user) {
         String password = user.getPassword();
         user.setOldPassword(password);
         user.setPassword(null);
@@ -40,7 +42,7 @@ public class UserService extends GenericService<User, UserDAO> {
     }
 
     @Transactional
-    public void enable(User user) {
+    public void enable(UserEntity user) {
         String password = user.getOldPassword();
         user.setPassword(password);
         user.setOldPassword(null);
@@ -48,9 +50,9 @@ public class UserService extends GenericService<User, UserDAO> {
     }
 
     @Transactional
-    public void insert(User user) {
+    public void insert(UserEntity user) {
         if (user.getGroups() == null) {
-            List<Group> groupes = new LinkedList<>();
+            List<GroupModel> groupes = new LinkedList<>();
             groupes.add(getGroup("USER"));
             user.setGroups(groupes);
         }
@@ -58,8 +60,5 @@ public class UserService extends GenericService<User, UserDAO> {
         user.setUserName(user.getUserName().toLowerCase().trim());
         super.insert(user);
     }
-
-    public boolean checkIfExists(String username) {
-        return getFromUsername(username) != null;
-    }
+    //endregion
 }

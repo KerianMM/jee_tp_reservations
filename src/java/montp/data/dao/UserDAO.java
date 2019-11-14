@@ -1,40 +1,32 @@
 package montp.data.dao;
 
+import montp.data.entity.security.GroupEntity;
+import montp.data.entity.security.UserEntity;
 import montp.tools.Tools;
-import montp.data.model.security.Group;
-import montp.data.model.security.User;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @ApplicationScoped
-public class UserDAO extends GenericDAO<User> {
+public class UserDAO extends GenericDAO<UserEntity> {
 
     public UserDAO() {
-        super(User.class);
+        super(UserEntity.class);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<User> getUsers() {
-        return em.createQuery("SELECT u FROM User u ORDER BY u.userName")
-                .getResultList();
-    }
-
-    public User getFromUsername(String username) {
-        return (User) em.createQuery("SELECT u FROM User u WHERE u.userName=:username")
+    public UserEntity findOneByUsername(String username) {
+        return (UserEntity) em.createQuery(makeQLString("e", "WHERE e.userName=:username"))
                 .setParameter("username", username)
                 .getSingleResult();
     }
 
-    public Group getGroup(String groupname) {
-        return em.find(Group.class, groupname);
+    public GroupEntity getGroup(String groupname) {
+        return em.find(GroupEntity.class, groupname);
     }
 
     @Transactional
-    public void update(User user) {
-        User u = em.find(User.class, user.getId());
+    public void update(UserEntity user) {
+        UserEntity u = em.find(UserEntity.class, user.getId());
         em.createNativeQuery("DELETE FROM SECURITY_USER_GROUP WHERE username=?1")
                 .setParameter(1, u.getUserName())
                 .executeUpdate();
@@ -49,6 +41,4 @@ public class UserDAO extends GenericDAO<User> {
                 .setParameter(2, "USER")
                 .executeUpdate();
     }
-
-
 }

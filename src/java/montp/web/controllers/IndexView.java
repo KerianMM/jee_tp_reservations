@@ -1,6 +1,7 @@
 package montp.web.controllers;
 
-import montp.data.model.security.User;
+import montp.data.entity.security.UserEntity;
+
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 public class IndexView implements Serializable {
 
     @Inject
-    private User user;
+    private UserEntity user;
 
     @PostConstruct
     public void init() {

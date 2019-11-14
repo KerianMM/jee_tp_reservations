@@ -1,14 +1,9 @@
 package montp.services;
 
 import montp.data.dao.ResourceTypeDAO;
-import montp.data.model.ResourceTypeEntity;
+import montp.data.entity.ResourceTypeEntity;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.List;
 
 @ApplicationScoped
-public class ResourceTypeService extends GenericService<ResourceTypeEntity, ResourceTypeDAO> {
-    public List<ResourceTypeEntity> getAll() {
-        return dao.findAll();
-    }
-}
+public class ResourceTypeService extends GenericService<ResourceTypeEntity, ResourceTypeDAO> {}

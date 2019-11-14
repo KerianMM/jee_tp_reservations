@@ -1,6 +1,6 @@
 package montp.web.controllers;
 
-import montp.data.model.ResourceTypeEntity;
+import montp.data.entity.ResourceTypeEntity;
 import montp.services.ResourceTypeService;
 
 import javax.faces.view.ViewScoped;

@@ -1,37 +1,25 @@
-package montp.data.model.security;
+package montp.data.model;
 
-import montp.data.model.GenericEntity;
 
-import javax.persistence.*;
+import javax.persistence.MappedSuperclass;
 import java.util.List;
 
-@Entity
-@Table(name = "SECURITY_USER")
-public class User extends GenericEntity {
+@MappedSuperclass
+public class UserModel extends GenericModel {
 
-    @Column(nullable = false, unique = true, length = 50)
     private String userName;
-    @Column(columnDefinition = "TEXT")
     private String password;
-    @Column(columnDefinition = "TEXT")
     private String oldPassword;
 
-    @ManyToMany
-    @JoinTable(name = "SECURITY_USER_GROUP",
-            joinColumns = @JoinColumn(name = "username",
-                    referencedColumnName = "username"),
-            inverseJoinColumns = @JoinColumn(name = "groupname",
-                    referencedColumnName = "groupname"))
-    private List<Group> groups;
+    private List<GroupModel> groups;
 
-    public User() {
-    }
-
-    public User(String userName, String password) {
+    public UserModel() {}
+    public UserModel(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
 
+    //region GETTERS / SETTERS
     public String getUserName() {
         return userName;
     }
@@ -48,11 +36,11 @@ public class User extends GenericEntity {
         this.password = password;
     }
 
-    public List<Group> getGroups() {
+    public List<GroupModel> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<Group> groups) {
+    public void setGroups(List<GroupModel> groups) {
         this.groups = groups;
     }
 
@@ -63,10 +51,10 @@ public class User extends GenericEntity {
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
     }
+    //endregion
 
     @Override
     public String toString() {
         return userName;
     }
-
 }

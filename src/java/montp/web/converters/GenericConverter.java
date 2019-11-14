@@ -1,13 +1,13 @@
 package montp.web.converters;
 
 import montp.data.dao.GenericDAO;
-import montp.data.model.GenericEntity;
+import montp.data.model.GenericModel;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-public class GenericConverter<T extends GenericEntity> implements Converter {
+public class GenericConverter<T extends GenericModel> implements Converter {
 
     protected GenericDAO<T> dao;
 
@@ -17,7 +17,7 @@ public class GenericConverter<T extends GenericEntity> implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String id) {
-        return dao.get(Integer.parseInt(id));
+        return dao.find(Integer.parseInt(id));
     }
 
     @Override
