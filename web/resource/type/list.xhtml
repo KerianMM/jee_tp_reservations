@@ -10,7 +10,7 @@
         <h:form id="resource_type_list_form">
             <p:growl id="messages" autoUpdate="true"/>
             <p:commandButton icon="fa fa-plus"
-                             value="Ajouter un joueur"
+                             value="#{msg['app.add.action']}"
                              actionListener="#{controller.resource.type.create()}"
                              process="@this"
                              oncomplete="PF('resource_type_dialog').show()"
@@ -23,33 +23,33 @@
                          value="#{controller.resource.type.resourceTypeEntities}"
                          styleClass="table-center">
                 <!--region FIELDS-->
-                <p:column headerText="Id">
+                <p:column headerText="#{msg['app.entity.resource.type.field.id']}">
                     <h:outputText value="#{type.id}"/>
                 </p:column>
 
-                <p:column headerText="Titre">
+                <p:column headerText="#{msg['app.entity.resource.type.field.title']}">
                     <h:outputText value="#{type.title}"/>
                 </p:column>
 
-                <p:column headerText="Partageable">
-                    <h:outputText value="#{(type.shareable) ?'oui' :'non'}"/>
+                <p:column headerText="#{msg['app.entity.resource.type.field.shareable']}">
+                    <h:outputText value="#{msg[(type.shareable) ?'app.yes' :'app.no']}"/>
                 </p:column>
                 <!--endregion-->
 
-                <p:column headerText="Options">
+                <p:column headerText="#{msg['app.datatable.column.options']}">
                     <p:commandButton icon="fa fa-edit"
-                                     title="Modifier"
+                                     title="#{msg['app.update.action']}"
                                      actionListener="#{controller.resource.type.setResourceTypeEntity(type)}"
                                      update="resource_type_dialog"
                                      oncomplete="PF('resource_type_dialog').show()"/>
 
                     <p:commandButton icon="fa fa-trash"
-                                     title="Supprimer"
+                                     title="#{msg['app.delete.action']}"
                                      rendered="#{controller.resource.type.canDelete(type)}"
                                      actionListener="#{controller.resource.type.delete(type)}"
                                      update="@form"
                                      process="@this">
-                        <p:confirm header="Supprimer le type de ressource"
+                        <p:confirm header="#{msg['app.delete.action']}"
                                    message="Supprimer #{type} ?"
                                    icon="fa fa-question-circle"/>
                     </p:commandButton>
@@ -59,7 +59,7 @@
         </h:form>
 
         <!--region DIALOGS-->
-        <p:dialog header="#{controller.resource.type.resourceTypeEntity.id == null ? 'Création de type de resource' : 'Modification de ' += controller.resource.type.resourceTypeEntity.title}"
+        <p:dialog header="#{controller.resource.type.resourceTypeEntity.id == null ?msg['app.add.action'] :msg['app.update.action'] +=' '+= controller.resource.type.resourceTypeEntity.title}"
                   widgetVar="resource_type_dialog"
                   minHeight="40"
                   modal="true"
@@ -67,15 +67,19 @@
                   id="resource_type_dialog">
             <h:form id="resource_type_form">
                 <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                    <p:outputLabel for="@next" value="Titre: "/>
+                    <p:outputLabel for="@next" value="${msg['app.entity.resource.type.field.title']}: "/>
                     <p:inputText id="resource_type_title"
+                                 required="true"
                                  value="#{controller.resource.type.resourceTypeEntity.title}"/>
-                    <h:outputLabel value="Partageable: "/>
+                    <h:outputLabel value="${msg['app.entity.resource.type.field.shareable']}: "/>
                     <p:toggleSwitch id="resource_type_shareable"
                                     value="#{controller.resource.type.resourceTypeEntity.shareable}"/>
                 </h:panelGrid>
                 <p:separator/>
-                <p:commandButton value="#{controller.resource.type.resourceTypeEntity.id == null ? 'Ajouter' : 'Enregistrer'}"
+                <h:outputText value="#{msg['app.requiredfields']}"/>
+                <br/>
+                <br/>
+                <p:commandButton value="#{msg[(controller.resource.type.resourceTypeEntity.id == null) ?'app.add.action' :'app.update.action']}"
                                  action="#{controller.resource.type.save()}"
                                  update="@form,resource_type_list_form:messages,resource_type_list_form:resource_type_list_datatable"
                                  oncomplete="if (!args.validationFailed) PF('resource_type_dialog').hide()"/>

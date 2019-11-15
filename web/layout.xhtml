@@ -19,10 +19,8 @@
 
         <header>
             <p:menubar>
-                <p:submenu label="Resource">
-                    <p:submenu label="Type">
-                        <p:menuitem value="List" outcome="/resource/type/list" />
-                    </p:submenu>
+                <p:submenu label="#{msg['app.entity.resource.class.title']}">
+                    <p:menuitem value="#{msg['app.entity.resource.type.class.title']}" outcome="/resource/type/list" />
                 </p:submenu>
             </p:menubar>
         </header>

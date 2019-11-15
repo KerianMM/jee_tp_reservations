@@ -1,6 +1,7 @@
 package montp.web.controllers;
 
 import montp.data.entity.ResourceTypeEntity;
+import montp.locale.Messages;
 import montp.services.ResourceTypeService;
 import montp.web.FacesTools;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Named("controller.resource.type")
 public class ResourceTypeController implements Serializable {
 
+    @Inject private Messages messages;
     @Inject private ResourceTypeService service;
 
     @Named @Produces private List<ResourceTypeEntity> resourceTypeEntities;
@@ -54,7 +56,7 @@ public class ResourceTypeController implements Serializable {
 
         FacesTools.addMessage(
             FacesMessage.SEVERITY_INFO,
-            (created ?"Joueur créé" :"Modifications enregistrées")
+            (created ?messages.get("app.added") :messages.get("app.updated"))
         );
 
         if (created) { init(); }
@@ -70,12 +72,12 @@ public class ResourceTypeController implements Serializable {
         if (service.canDelete(entity)) {
             FacesTools.addMessage(
                     FacesMessage.SEVERITY_ERROR,
-                    "Impossible de supprimer le type de ressource"
+                    messages.get("app.delete.error")
             );
         } else {
             FacesTools.addMessage(
                     FacesMessage.SEVERITY_INFO,
-                    "Le type de ressource a bien été supprimé"
+                    messages.get("app.deleted")
             );
 
             init();
