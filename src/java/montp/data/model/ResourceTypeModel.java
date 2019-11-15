@@ -28,4 +28,7 @@ public class ResourceTypeModel extends GenericModel {
     public void setShareable(Boolean shareable) {
         this.shareable = shareable;
     }
+
+    @Override
+    public String toString() { return title; }
 }

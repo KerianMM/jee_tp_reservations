@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="../../layout.xhtml">
+    <ui:param name="title" value="List"/>
+    <ui:define name="content">
+
+        <h:form id="resource_type_list_form">
+            <p:growl id="messages" autoUpdate="true"/>
+            <p:commandButton icon="fa fa-plus"
+                             value="Ajouter un joueur"
+                             actionListener="#{controller.resource.type.create()}"
+                             process="@this"
+                             oncomplete="PF('resource_type_dialog').show()"
+                             update="resource_type_dialog"/>
+            <br/>
+
+            <!--region LIST-->
+            <p:dataTable id="resource_type_list_datatable"
+                         var="type"
+                         value="#{controller.resource.type.resourceTypeEntities}"
+                         styleClass="table-center">
+                <!--region FIELDS-->
+                <p:column headerText="Id">
+                    <h:outputText value="#{type.id}"/>
+                </p:column>
+
+                <p:column headerText="Titre">
+                    <h:outputText value="#{type.title}"/>
+                </p:column>
+
+                <p:column headerText="Partageable">
+                    <h:outputText value="#{(type.shareable) ?'oui' :'non'}"/>
+                </p:column>
+                <!--endregion-->
+
+                <p:column headerText="Options">
+                    <p:commandButton icon="fa fa-edit"
+                                     title="Modifier"
+                                     actionListener="#{controller.resource.type.setResourceTypeEntity(type)}"
+                                     update="resource_type_dialog"
+                                     oncomplete="PF('resource_type_dialog').show()"/>
+
+                    <p:commandButton icon="fa fa-trash"
+                                     title="Supprimer"
+                                     rendered="#{controller.resource.type.canDelete(type)}"
+                                     actionListener="#{controller.resource.type.delete(type)}"
+                                     update="@form"
+                                     process="@this">
+                        <p:confirm header="Supprimer le type de ressource"
+                                   message="Supprimer #{type} ?"
+                                   icon="fa fa-question-circle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <!--endregion-->
+        </h:form>
+
+        <!--region DIALOGS-->
+        <p:dialog header="#{controller.resource.type.resourceTypeEntity.id == null ? 'Création de type de resource' : 'Modification de ' += controller.resource.type.resourceTypeEntity.title}"
+                  widgetVar="resource_type_dialog"
+                  minHeight="40"
+                  modal="true"
+                  closeOnEscape="true"
+                  id="resource_type_dialog">
+            <h:form id="resource_type_form">
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:outputLabel for="@next" value="Titre: "/>
+                    <p:inputText id="resource_type_title"
+                                 value="#{controller.resource.type.resourceTypeEntity.title}"/>
+                    <h:outputLabel value="Partageable: "/>
+                    <p:toggleSwitch id="resource_type_shareable"
+                                    value="#{controller.resource.type.resourceTypeEntity.shareable}"/>
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton value="#{controller.resource.type.resourceTypeEntity.id == null ? 'Ajouter' : 'Enregistrer'}"
+                                 action="#{controller.resource.type.save()}"
+                                 update="@form,resource_type_list_form:messages,resource_type_list_form:resource_type_list_datatable"
+                                 oncomplete="if (!args.validationFailed) PF('resource_type_dialog').hide()"/>
+            </h:form>
+        </p:dialog>
+        <!--endregion-->
+    </ui:define>
+</ui:composition>
+

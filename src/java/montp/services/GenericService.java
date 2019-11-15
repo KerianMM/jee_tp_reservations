@@ -13,15 +13,25 @@ public abstract class GenericService<T extends GenericModel, DAO extends Generic
     protected DAO dao;
 
     //region GETTERS
-    public T get(long id) {  return dao.find(id); }
-    public T get(T entity) { return dao.find(entity.getId()); }
-    public List<T> getAll() { return dao.findAll(); }
+    public T get(long id) {     return dao.find(id); }
+    public T get(T entity) {    return dao.find(entity.getId()); }
+    public List<T> getAll() {   return dao.findAll(); }
     public List<T> getPaged() { return dao.findPaged(1, 10); }
     public List<T> getPaged(Integer page) { return dao.findPaged(page, 10); }
     public List<T> getPaged(Integer page, Integer perPage) { return dao.findPaged(page, perPage); }
     //endregion
 
     //region TRANSACTIONS
+    @Transactional
+    public boolean save(T instance) {
+        if (instance.getId() == null) {
+            insert(instance);
+            return true;
+        }
+        update(instance);
+        return false;
+    }
+
     @Transactional
     public void insert(T instance) { dao.insert(instance); }
 

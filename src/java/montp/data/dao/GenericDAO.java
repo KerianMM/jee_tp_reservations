@@ -72,7 +72,5 @@ public abstract class GenericDAO<T extends GenericModel> {
     }
     //endregion
 
-    public boolean canDelete(T instance) {
-        return false;
-    }
+    public boolean canDelete(T instance) { return find(instance.getId()) != null; }
 }
