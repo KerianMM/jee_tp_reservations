@@ -72,12 +72,21 @@ public class Seeder {
                 em.persist(groupUser);
                 em.persist(groupAdmin);
 
-                UserEntity userAdmin = new UserEntity("admin", "admin", kerian);
-                List<GroupEntity> groupes = new ArrayList<>();
-                groupes.add(groupUser);
-                groupes.add(groupAdmin);
-                userAdmin.setGroups(groupes);
+                UserEntity userAdmin = new UserEntity("kerian", "kerian", kerian);
+                UserEntity userUser = new UserEntity("ben", "ben", ben);
+
+                List<GroupEntity> groupesAdmin  = new ArrayList<>();
+                List<GroupEntity> groupesUser   = new ArrayList<>();
+
+                groupesUser.add(groupUser);
+                userUser.setGroups(groupesUser);
+
+                groupesAdmin.add(groupUser);
+                groupesAdmin.add(groupAdmin);
+                userAdmin.setGroups(groupesAdmin);
+
                 userService.insert(userAdmin);
+                userService.insert(userUser);
             }
         }
     }
