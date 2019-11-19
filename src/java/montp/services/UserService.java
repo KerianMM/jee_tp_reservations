@@ -3,7 +3,6 @@ package montp.services;
 import montp.data.dao.UserDAO;
 import montp.data.entity.security.GroupEntity;
 import montp.data.entity.security.UserEntity;
-import montp.data.model.GroupModel;
 import montp.tools.Tools;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -52,7 +51,7 @@ public class UserService extends GenericService<UserEntity, UserDAO> {
     @Transactional
     public void insert(UserEntity user) {
         if (user.getGroups() == null) {
-            List<GroupModel> groupes = new LinkedList<>();
+            List<GroupEntity> groupes = new LinkedList<>();
             groupes.add(getGroup("USER"));
             user.setGroups(groupes);
         }

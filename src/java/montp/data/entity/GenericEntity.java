@@ -1,12 +1,17 @@
-package montp.data.model;
+package montp.data.entity;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class GenericModel implements Serializable {
-    protected Long id;
+public abstract class GenericEntity implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE) protected Long id;
 
     @Override
     public int hashCode() {
@@ -26,7 +31,7 @@ public abstract class GenericModel implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final GenericModel other = (GenericModel) obj;
+        final GenericEntity other = (GenericEntity) obj;
         return Objects.equals(this.id, other.id);
     }
 

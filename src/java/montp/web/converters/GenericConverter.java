@@ -1,13 +1,13 @@
 package montp.web.converters;
 
 import montp.data.dao.GenericDAO;
-import montp.data.model.GenericModel;
+import montp.data.entity.GenericEntity;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-public class GenericConverter<T extends GenericModel> implements Converter {
+public class GenericConverter<T extends GenericEntity> implements Converter {
 
     protected GenericDAO<T> dao;
 

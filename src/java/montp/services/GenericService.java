@@ -1,13 +1,13 @@
 package montp.services;
 
 import montp.data.dao.GenericDAO;
-import montp.data.model.GenericModel;
+import montp.data.entity.GenericEntity;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public abstract class GenericService<T extends GenericModel, DAO extends GenericDAO<T>> {
+public abstract class GenericService<T extends GenericEntity, DAO extends GenericDAO<T>> {
 
     @Inject
     protected DAO dao;
@@ -51,4 +51,8 @@ public abstract class GenericService<T extends GenericModel, DAO extends Generic
     //endregion
 
     public boolean canDelete(T instance) { return dao.canDelete(instance); }
+
+    public Integer count() { return dao.count(); }
+
+    public boolean isEmpty() { return dao.isEmpty(); }
 }

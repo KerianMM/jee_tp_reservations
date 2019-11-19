@@ -1,13 +1,13 @@
 package montp.data.dao;
 
-import montp.data.model.GenericModel;
+import montp.data.entity.GenericEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public abstract class GenericDAO<T extends GenericModel> {
+public abstract class GenericDAO<T extends GenericEntity> {
 
     @PersistenceContext
     protected EntityManager em;
@@ -73,4 +73,14 @@ public abstract class GenericDAO<T extends GenericModel> {
     //endregion
 
     public boolean canDelete(T instance) { return find(instance.getId()) != null; }
+
+    public Integer count() {
+        Object singleResult = em
+                .createQuery(String.format("SELECT COUNT(e) FROM %s e", instanceClass.getSimpleName()))
+                .getSingleResult();
+
+        return (singleResult != null) ?Integer.parseInt(singleResult.toString()) :0;
+    }
+
+    public boolean isEmpty() { return count() == 0; }
 }

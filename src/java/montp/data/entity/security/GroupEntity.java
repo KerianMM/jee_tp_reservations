@@ -1,24 +1,28 @@
 package montp.data.entity.security;
 
-import montp.data.model.GroupModel;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name="SECURITY_GROUP")
-public class GroupEntity extends GroupModel {
+public class GroupEntity {
 
     @Id
     @Column(columnDefinition = "TEXT")
     protected String groupName;
 
-    public GroupEntity() { super(); }
+    public GroupEntity() {}
     public GroupEntity(String groupName) {
-        super(groupName);
+        this.groupName = groupName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }
