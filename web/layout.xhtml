@@ -18,11 +18,23 @@
         </p:confirmDialog>
 
         <header>
-            <p:menubar>
-                <p:submenu label="#{msg['app.entity.resource.class.title']}">
-                    <p:menuitem value="#{msg['app.entity.resource.type.class.title']}" outcome="/resource/type/list" />
-                </p:submenu>
-            </p:menubar>
+            <h:form>
+                <p:menubar>
+                    <p:submenu label="#{msg['app.entity.resource.class.title']}">
+                        <p:menuitem value="#{msg['app.entity.resource.type.class.title']}" outcome="/resource/type/list" />
+                    </p:submenu>
+                    <p:menuitem rendered="#{request.userPrincipal != null}">
+                            <p:commandButton value="Se déconnecter"
+                                             icon="fa fa-sign-out"
+                                             action="#{controller.security.logout()}"/>
+                    </p:menuitem>
+                    <p:menuitem rendered="#{request.userPrincipal == null}">
+                        <p:commandButton value="Se connecter"
+                                         icon="fa fa-sign-in"
+                                         action="#{controller.security.login()}"/>
+                    </p:menuitem>
+                </p:menubar>
+            </h:form>
         </header>
 
         <main>
