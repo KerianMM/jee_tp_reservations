@@ -41,6 +41,54 @@
         <welcome-file>app/index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>security</realm-name>
+        <form-login-config>
+            <form-login-page>/app/login.xhtml</form-login-page>
+            <form-error-page>/app/login.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+
+    <security-constraint>
+        <display-name>anonymes</display-name>
+        <web-resource-collection>
+            <web-resource-name>resources</web-resource-name>
+            <description/>
+            <url-pattern>/app/javax.faces.resource/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>login</web-resource-name>
+            <description/>
+            <url-pattern>/app/login.xhtml</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+
+    <security-constraint>
+        <display-name>admin</display-name>
+        <web-resource-collection>
+            <web-resource-name>resource_type_list</web-resource-name>
+            <description/>
+            <url-pattern>/app/resource/type/list.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <display-name>user</display-name>
+        <web-resource-collection>
+            <web-resource-name>index</web-resource-name>
+            <description/>
+            <url-pattern>/app/index.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>USER</role-name>
+        </auth-constraint>
+    </security-constraint>
 
     <security-role>
         <description/>
