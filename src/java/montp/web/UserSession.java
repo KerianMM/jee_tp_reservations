@@ -24,7 +24,7 @@ public class UserSession implements Serializable {
 
     @PostConstruct
     public void init() {
-        user = userService.getOneByUsername(FacesTools.getRequest().getUserPrincipal().getName());
-//        user = userService.getFromUsername("admin"); // désactiver la sécurité dans web.xml pour l'autologin
+//        user = userService.getOneByUsername(FacesTools.getRequest().getUserPrincipal().getName());
+        user = userService.getOneByUsername("kerian"); // désactiver la sécurité dans web.xml pour l'autologin
     }
 }

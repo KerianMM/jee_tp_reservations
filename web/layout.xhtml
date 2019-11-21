@@ -21,7 +21,7 @@
             <h:form>
                 <p:menubar>
                     <p:submenu label="#{msg['app.entity.resource.class.title']}">
-                        <p:menuitem value="#{msg['app.entity.resource.type.class.title']}" outcome="/resource/type/list" />
+                        <p:menuitem value="#{msg['app.entity.resource.type.class.title']}" outcome="/resource/type/crud" />
                     </p:submenu>
                     <p:menuitem rendered="#{request.userPrincipal != null}">
                             <p:commandButton value="Se déconnecter"

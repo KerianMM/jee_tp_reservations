@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="../layout.xhtml">
+    <ui:param name="title" value="#{msg['app.entity.resource.crud.title']}"/>
+    <ui:define name="content">
+
+        <h:form id="resource_list_form">
+            <p:growl id="messages" autoUpdate="true"/>
+            <p:commandButton icon="fa fa-plus"
+                             value="#{msg['app.add.action']}"
+                             actionListener="#{controller.resource.user.crud.create()}"
+                             process="@this"
+                             oncomplete="PF('resource_dialog').show()"
+                             update="resource_dialog"/>
+            <br/>
+
+            <!--region LIST-->
+            <p:dataTable id="resource_list_datatable"
+                         var="resource"
+                         value="#{controller.resource.user.crud.entities}"
+                         styleClass="table-center">
+                <!--region FIELDS-->
+                <p:column headerText="#{msg['app.entity.resource.field.id']}">
+                    <h:outputText value="#{resource.id}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['app.entity.resource.field.type']}">
+                    <h:outputText value="#{resource.type}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['app.entity.resource.field.capacity']}">
+                    <h:outputText value="#{resource.capacity}"/>
+                </p:column>
+                <!--endregion-->
+
+                <p:column headerText="#{msg['app.datatable.column.options']}">
+                    <p:commandButton icon="fa fa-edit"
+                                     title="#{msg['app.update.action']}"
+                                     actionListener="#{controller.resource.user.crud.setEntity(resource)}"
+                                     update="resource_dialog"
+                                     oncomplete="PF('resource_dialog').show()"/>
+
+                    <p:commandButton icon="fa fa-trash"
+                                     title="#{msg['app.delete.action']}"
+                                     rendered="#{controller.resource.user.crud.canDelete(resource)}"
+                                     actionListener="#{controller.resource.user.crud.delete(resource)}"
+                                     update="@form"
+                                     process="@this">
+                        <p:confirm header="#{msg['app.delete.action']}"
+                                   message="Supprimer #{resource} ?"
+                                   icon="fa fa-question-circle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <!--endregion-->
+        </h:form>
+
+        <!--region DIALOGS-->
+        <p:dialog header="#{controller.resource.user.crud.entity.id == null ?msg['app.add.action'] :msg['app.update.action'] +=' '+= controller.resource.user.crud.entity.title}"
+                  widgetVar="resource_dialog"
+                  minHeight="40"
+                  modal="true"
+                  closeOnEscape="true"
+                  id="resource_dialog">
+            <h:form id="resource_form">
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:outputLabel for="@next" value="#{msg['app.entity.resource.field.type']}" />
+                    <p:selectOneMenu id="resource_type" value="#{controller.resource.user.crud.entity.type}"
+                                     dynamic="true"
+                                     style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{controller.resource.user.crud.types}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="@next" value="${msg['app.entity.resource.field.capacity']}: "/>
+                    <p:inputText id="resource_capacity"
+                                 value="#{controller.resource.user.crud.entity.capacity}"/>
+                </h:panelGrid>
+                <p:separator/>
+                <h:outputText value="#{msg['app.requiredfields']}"/>
+                <br/>
+                <br/>
+                <p:commandButton value="#{msg[(controller.resource.user.crud.entity.id == null) ?'app.add.action' :'app.update.action']}"
+                                 action="#{controller.resource.user.crud.save()}"
+                                 update="@form,resource_list_form:messages,resource_list_form:resource_list_datatable"
+                                 oncomplete="if (!args.validationFailed) PF('resource_dialog').hide()"/>
+            </h:form>
+        </p:dialog>
+        <!--endregion-->
+    </ui:define>
+</ui:composition>
+
