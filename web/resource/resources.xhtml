@@ -19,38 +19,38 @@
 
             <!--region LIST-->
             <p:dataTable id="resource_list_datatable"
-                         var="resource"
+                         var="resourceEntity"
                          value="#{controller.resource.user.crud.entities}"
                          styleClass="table-center">
                 <!--region FIELDS-->
                 <p:column headerText="#{msg['app.entity.resource.field.id']}">
-                    <h:outputText value="#{resource.id}"/>
+                    <h:outputText value="#{resourceEntity.id}"/>
                 </p:column>
 
                 <p:column headerText="#{msg['app.entity.resource.field.type']}">
-                    <h:outputText value="#{resource.type}"/>
+                    <h:outputText value="#{resourceEntity.type}"/>
                 </p:column>
 
                 <p:column headerText="#{msg['app.entity.resource.field.capacity']}">
-                    <h:outputText value="#{resource.capacity}"/>
+                    <h:outputText value="#{resourceEntity.capacity}"/>
                 </p:column>
                 <!--endregion-->
 
                 <p:column headerText="#{msg['app.datatable.column.options']}">
                     <p:commandButton icon="fa fa-edit"
                                      title="#{msg['app.update.action']}"
-                                     actionListener="#{controller.resource.user.crud.setEntity(resource)}"
+                                     actionListener="#{controller.resource.user.crud.setEntity(resourceEntity)}"
                                      update="resource_dialog"
                                      oncomplete="PF('resource_dialog').show()"/>
 
                     <p:commandButton icon="fa fa-trash"
                                      title="#{msg['app.delete.action']}"
-                                     rendered="#{controller.resource.user.crud.canDelete(resource)}"
-                                     actionListener="#{controller.resource.user.crud.delete(resource)}"
+                                     rendered="#{controller.resource.user.crud.canDelete(resourceEntity)}"
+                                     actionListener="#{controller.resource.user.crud.delete(resourceEntity)}"
                                      update="@form"
                                      process="@this">
                         <p:confirm header="#{msg['app.delete.action']}"
-                                   message="Supprimer #{resource} ?"
+                                   message="Supprimer #{resourceEntity} ?"
                                    icon="fa fa-question-circle"/>
                     </p:commandButton>
                 </p:column>

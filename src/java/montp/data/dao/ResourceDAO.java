@@ -15,4 +15,9 @@ public class ResourceDAO extends GenericDAO<ResourceEntity> {
                 .setParameter("person", person)
                 .getResultList();
     }
+
+    @Override
+    public boolean canDelete(ResourceEntity instance) {
+        return super.canDelete(instance) && instance.getBookings().isEmpty();
+    }
 }
