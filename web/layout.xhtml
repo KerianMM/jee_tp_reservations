@@ -19,19 +19,18 @@
 
         <header>
             <h:form>
-                <p:menubar>
-                    <p:submenu label="#{msg['app.entity.resource.class.title']}">
-                        <p:menuitem value="#{msg['app.entity.resource.type.class.title']}" outcome="/resource/type/crud" />
+                <p:menubar rendered="#{request.userPrincipal != null}">
+                    <p:menuitem value="#{msg['app.entity.resource.owner']}"
+                                outcome="/resource/resources"/>
+                    <p:submenu label="#{msg['app.security.roles.admin']}"
+                               rendered="#{request.userPrincipal.isUserInRole('ADMIN')}">
+                        <p:menuitem value="#{msg['app.entity.resource.type.class.title']}"
+                                    outcome="/resource/type/crud"/>
                     </p:submenu>
-                    <p:menuitem rendered="#{request.userPrincipal != null}">
+                    <p:menuitem>
                             <p:commandButton value="Se déconnecter"
                                              icon="fa fa-sign-out"
                                              action="#{controller.security.logout()}"/>
-                    </p:menuitem>
-                    <p:menuitem rendered="#{request.userPrincipal == null}">
-                        <p:commandButton value="Se connecter"
-                                         icon="fa fa-sign-in"
-                                         action="#{controller.security.login()}"/>
                     </p:menuitem>
                 </p:menubar>
             </h:form>
