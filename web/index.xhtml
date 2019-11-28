@@ -6,6 +6,70 @@
                 template="./layout.xhtml">
     <ui:param name="title" value="Mon TP" />
     <ui:define name="content">
+
+        <h:form id="resource_list_form">
+            <p:growl id="messages" autoUpdate="true"/>
+            <p:commandButton icon="fa fa-plus"
+                             value="#{msg['app.add.action']}"
+                             actionListener="#{controller.booking.user.create.create()}"
+                             process="@this"
+                             oncomplete="PF('resource_dialog').show()"
+                             update="resource_dialog"/>
+            <br/>
+
+            <!--region LIST-->
+            <p:dataTable id="resource_list_datatable"
+                         var="resourceEntity"
+                         value="#{controller.booking.user.create.entities}"
+                         styleClass="table-center">
+                <!--region FIELDS-->
+                <p:column headerText="#{msg['app.entity.resource.field.id']}">
+                    <h:outputText value="#{resourceEntity.id}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['app.entity.resource.field.type']}">
+                    <h:outputText value="#{resourceEntity.type}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['app.entity.resource.field.capacity']}">
+                    <h:outputText value="#{resourceEntity.capacity}"/>
+                </p:column>
+                <!--endregion-->
+
+                <p:column headerText="#{msg['app.datatable.column.options']}">
+                    <p:commandButton icon="fa fa-bookmark"
+                                     title="#{msg['app.update.action']}"
+                                     actionListener="#{controller.booking.user.create.createFromResource(resourceEntity)}"
+                                     update="resource_dialog"
+                                     oncomplete="PF('resource_dialog').show()"/>
+                </p:column>
+            </p:dataTable>
+            <!--endregion-->
+        </h:form>
+
+        <!--region DIALOGS-->
+        <p:dialog header="#{controller.booking.user.create.entity.id == null ?msg['app.add.action'] :msg['app.update.action'] +=' '+= controller.booking.user.create.entity.title}"
+                  widgetVar="resource_dialog"
+                  minHeight="40"
+                  modal="true"
+                  closeOnEscape="true"
+                  id="resource_dialog">
+            <h:form id="resource_form">
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:outputLabel for="button" value="Button:" />
+                    <p:calendar id="button" value="#{calendarView.date3}" showOn="button" />
+                </h:panelGrid>
+                <p:separator/>
+                <h:outputText value="#{msg['app.requiredfields']}"/>
+                <br/>
+                <br/>
+                <p:commandButton value="#{msg[(controller.booking.user.create.entity.id == null) ?'app.add.action' :'app.update.action']}"
+                                 action="#{controller.booking.user.create.save()}"
+                                 update="@form,resource_list_form:messages,resource_list_form:resource_list_datatable"
+                                 oncomplete="if (!args.validationFailed) PF('resource_dialog').hide()"/>
+            </h:form>
+        </p:dialog>
+        <!--endregion-->
     </ui:define>
 </ui:composition>
 

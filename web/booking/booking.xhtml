@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="../layout.xhtml">
+    <ui:param name="title" value="#{msg['app.entity.booking.crud.title']}"/>
+    <ui:define name="content">
+
+        <h:form id="booking_list_form">
+            <p:growl id="messages" autoUpdate="true"/>
+            <p:commandButton icon="fa fa-plus"
+                             value="#{msg['app.add.action']}"
+                             actionListener="#{controller.booking.user.crud.create()}"
+                             process="@this"
+                             oncomplete="PF('booking_dialog').show()"
+                             update="booking_dialog"/>
+            <br/>
+
+            <!--region LIST-->
+            <p:dataTable id="booking_list_datatable"
+                         var="booking"
+                         value="#{controller.booking.user.crud.entities}"
+                         styleClass="table-center">
+                <!--region FIELDS-->
+                <p:column headerText="#{msg['app.entity.booking.field.id']}">
+                    <h:outputText value="#{booking.id}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['app.entity.booking.field.type']}">
+                    <h:outputText value="#{booking.type}"/>
+                </p:column>
+
+                <p:column headerText="#{msg['app.entity.booking.field.capacity']}">
+                    <h:outputText value="#{booking.capacity}"/>
+                </p:column>
+                <!--endregion-->
+
+                <p:column headerText="#{msg['app.datatable.column.options']}">
+                    <p:commandButton icon="fa fa-edit"
+                                     title="#{msg['app.update.action']}"
+                                     actionListener="#{controller.booking.user.crud.setEntity(booking)}"
+                                     update="booking_dialog"
+                                     oncomplete="PF('booking_dialog').show()"/>
+
+                    <p:commandButton icon="fa fa-trash"
+                                     title="#{msg['app.delete.action']}"
+                                     rendered="#{controller.booking.user.crud.canDelete(booking)}"
+                                     actionListener="#{controller.booking.user.crud.delete(booking)}"
+                                     update="@form"
+                                     process="@this">
+                        <p:confirm header="#{msg['app.delete.action']}"
+                                   message="Supprimer #{booking} ?"
+                                   icon="fa fa-question-circle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <!--endregion-->
+        </h:form>
+
+        <!--region DIALOGS-->
+        <p:dialog header="#{controller.booking.user.crud.entity.id == null ?msg['app.add.action'] :msg['app.update.action'] +=' '+= controller.booking.user.crud.entity.title}"
+                  widgetVar="booking_dialog"
+                  minHeight="40"
+                  modal="true"
+                  closeOnEscape="true"
+                  id="booking_dialog">
+            <h:form id="booking_form">
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:outputLabel for="@next" value="#{msg['app.entity.booking.field.type']}" />
+                    <p:selectOneMenu id="booking_type" value="#{controller.booking.user.crud.entity.type}"
+                                     dynamic="true"
+                                     style="width:125px">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{controller.booking.user.crud.types}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="@next" value="${msg['app.entity.booking.field.capacity']}: "/>
+                    <p:inputText id="booking_capacity"
+                                 value="#{controller.booking.user.crud.entity.capacity}"/>
+                </h:panelGrid>
+                <p:separator/>
+                <h:outputText value="#{msg['app.requiredfields']}"/>
+                <br/>
+                <br/>
+                <p:commandButton value="#{msg[(controller.booking.user.crud.entity.id == null) ?'app.add.action' :'app.update.action']}"
+                                 action="#{controller.booking.user.crud.save()}"
+                                 update="@form,booking_list_form:messages,booking_list_form:booking_list_datatable"
+                                 oncomplete="if (!args.validationFailed) PF('booking_dialog').hide()"/>
+            </h:form>
+        </p:dialog>
+        <!--endregion-->
+    </ui:define>
+</ui:composition>
+
