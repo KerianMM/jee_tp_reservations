@@ -2,13 +2,18 @@ package montp.web.controllers.base;
 
 import montp.data.entity.GenericEntity;
 import montp.services.GenericService;
+import montp.web.FacesTools;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-public abstract class CRUDController<T extends GenericEntity, Service extends GenericService> extends CUDController<T, Service> {
+public abstract class RController<T extends GenericEntity, Service extends GenericService> extends Controller {
+
+    @Inject protected Service service;
 
     @Named
     @Produces
